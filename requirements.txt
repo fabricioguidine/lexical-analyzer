@@ -1,0 +1,3 @@
+# Requirements for Lexical Analyzer
+# No external dependencies required - uses only Python standard library
+
