@@ -33,18 +33,25 @@ class LexicalAnalyzer:
                 end_pos = tag.match(text, pos)
                 if end_pos is not None:
                     length = end_pos - pos
-                    if best_match is None or length > (best_match[1] - pos):
-                        best_match = (tag, end_pos)
-                    elif length == (best_match[1] - pos):
-                        # Same length: prefer earlier defined tag
-                        if self.tag_order[tag.name] < self.tag_order[best_match[0].name]:
+                    # Only accept matches that advance position (length > 0) or match at current position
+                    if length > 0 or end_pos == pos:
+                        if best_match is None or length > (best_match[1] - pos):
                             best_match = (tag, end_pos)
+                        elif length == (best_match[1] - pos):
+                            # Same length: prefer earlier defined tag
+                            if self.tag_order[tag.name] < self.tag_order[best_match[0].name]:
+                                best_match = (tag, end_pos)
             
             if best_match is None:
                 raise ValueError(f"Cannot tokenize character at position {pos}: '{text[pos]}'")
             
             tag, end_pos = best_match
             tokens.append(tag.name)
+            
+            # Prevent infinite loop: must advance position
+            if end_pos <= pos:
+                raise ValueError(f"Cannot advance past position {pos}")
+            
             pos = end_pos
         
         return tokens

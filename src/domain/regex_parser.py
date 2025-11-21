@@ -72,35 +72,43 @@ class RegexParser:
         pos = 0
         
         while pos < len(expr):
-            char, pos = self.parse_character(expr, pos)
-            
-            if char == '+':  # Union
+            # Check if next character is backslash (escape)
+            if pos < len(expr) and expr[pos] == '\\':
+                # Check for lambda (empty string) escape sequence
+                if pos + 1 < len(expr) and expr[pos + 1] == 'l':
+                    # Lambda (empty string)
+                    pos += 2  # Skip \l
+                    stack.append(self._empty_string())
+                else:
+                    # Parse escape sequence - this will be a literal character
+                    char, pos = self.parse_character(expr, pos)
+                    stack.append(self._single_character(char))
+            elif pos < len(expr) and expr[pos] == '+':  # Union operator
+                pos += 1
                 if len(stack) < 2:
                     raise ValueError("Not enough operands for union operator")
                 b = stack.pop()
                 a = stack.pop()
                 result = self._union(a, b)
                 stack.append(result)
-            
-            elif char == '.':  # Concatenation
+            elif pos < len(expr) and expr[pos] == '.':  # Concatenation operator
+                pos += 1
                 if len(stack) < 2:
                     raise ValueError("Not enough operands for concatenation operator")
                 b = stack.pop()
                 a = stack.pop()
                 result = self._concatenation(a, b)
                 stack.append(result)
-            
-            elif char == '*':  # Kleene star
+            elif pos < len(expr) and expr[pos] == '*':  # Kleene star operator
+                pos += 1
                 if len(stack) < 1:
                     raise ValueError("Not enough operands for Kleene star operator")
                 a = stack.pop()
                 result = self._kleene_star(a)
                 stack.append(result)
-            
-            elif char == '':  # Lambda (empty string)
-                stack.append(self._empty_string())
-            
-            else:  # Character
+            else:
+                # Parse as regular character
+                char, pos = self.parse_character(expr, pos)
                 stack.append(self._single_character(char))
         
         if len(stack) != 1:
