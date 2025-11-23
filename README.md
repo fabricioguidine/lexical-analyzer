@@ -261,6 +261,8 @@ lexical-analyzer/
 ├── Makefile                 # Build system
 ├── setup.py                 # Python package setup
 ├── requirements.txt         # Dependencies (none required)
+├── docs/                    # Documentation
+│   └── project-specification.pdf  # Project specification document
 └── README.md                # This file
 ```
 
@@ -305,7 +307,7 @@ The system uses **Thompson's construction algorithm** to build NFAs from regular
 
 The complete project specification is available in the repository:
 
-**Document**: [`ACFrOgALQLndU88srjBOsX865RxEumVtgl9fVsOwSczo0R0SkJX8Q8V80tGylKszPlCl-7lHNAzfa4LRcX_pN-aPlhfBvnRcoeU9Ejke3knp3VOX5uth6qbdhLb5HZ4ReSE5vwZs4oFiVLAgHWs9.pdf`](ACFrOgALQLndU88srjBOsX865RxEumVtgl9fVsOwSczo0R0SkJX8Q8V80tGylKszPlCl-7lHNAzfa4LRcX_pN-aPlhfBvnRcoeU9Ejke3knp3VOX5uth6qbdhLb5HZ4ReSE5vwZs4oFiVLAgHWs9.pdf)
+**Document**: [`docs/project-specification.pdf`](docs/project-specification.pdf)
 
 This document contains:
 - Complete technical specification
