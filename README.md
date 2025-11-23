@@ -43,25 +43,25 @@ The analyzer uses a **longest match strategy** with priority resolution, ensurin
 The project follows **Clean Architecture** principles with three distinct layers, ensuring separation of concerns and maintainability:
 
 ```
-                    ┌──────────────┐
-                    │     CLI      │
-                    │  Infrastructure
-                    └──────┬───────┘
+                    Infrastructure
+                    ┌─────────────┐
+                    │     CLI     │
+                    └──────┬──────┘
                            │
+                    Application
         ┌──────────────────┴──────────────────┐
         │                                      │
-┌───────▼────────┐              ┌─────────────▼──────┐
-│LexicalAnalyzer │              │  CommandHandler    │
-│  Application   │              │    Application     │
-└───────┬────────┘              └─────────────┬──────┘
+┌───────▼───────┐                    ┌────────▼────────┐
+│LexicalAnalyzer│                    │ CommandHandler │
+└───────┬───────┘                    └────────┬────────┘
         │                                      │
         └──────────────┬───────────────────────┘
                        │
+                      Domain
         ┌──────────────┼──────────────┐
         │              │              │
-┌───────▼──────┐ ┌─────▼──────┐ ┌─────▼──────┐
+┌───────▼──────┐ ┌─────▼──────┐ ┌────▼──────┐
 │     Tag      │ │RegexParser │ │ Automaton │
-│    Domain    │ │   Domain   │ │  Domain   │
 └──────────────┘ └────────────┘ └───────────┘
 ```
 
