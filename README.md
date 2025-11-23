@@ -50,12 +50,12 @@ The project follows **Clean Architecture** principles with three distinct layers
                            │
                     Application
         ┌──────────────────┴──────────────────┐
-        │                                      │
+        │                                     │
 ┌───────▼───────┐                    ┌────────▼────────┐
-│LexicalAnalyzer│                    │ CommandHandler │
+│LexicalAnalyzer│                    │ CommandHandler  │
 └───────┬───────┘                    └────────┬────────┘
-        │                                      │
-        └──────────────┬───────────────────────┘
+        │                                     │
+        └──────────────┬──────────────────────┘
                        │
                       Domain
         ┌──────────────┼──────────────┐
