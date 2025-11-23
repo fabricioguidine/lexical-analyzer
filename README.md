@@ -43,40 +43,26 @@ The analyzer uses a **longest match strategy** with priority resolution, ensurin
 The project follows **Clean Architecture** principles with three distinct layers, ensuring separation of concerns and maintainability:
 
 ```
-┌─────────────────────────────────────────────────────────────┐
-│                    INFRASTRUCTURE LAYER                       │
-│                                                               │
-│                    ┌──────────────────┐                      │
-│                    │       CLI        │                      │
-│                    │  • User I/O      │                      │
-│                    │  • Commands      │                      │
-│                    └────────┬─────────┘                      │
-└────────────────────────────┼─────────────────────────────────┘
-                             │
-                             ▼
-┌─────────────────────────────────────────────────────────────┐
-│                     APPLICATION LAYER                        │
-│                                                               │
-│     ┌────────────────────┐      ┌────────────────────┐     │
-│     │ LexicalAnalyzer    │      │  CommandHandler    │     │
-│     │ • Tokenization     │      │  • Commands        │     │
-│     │ • Longest match    │      │  • Tag management  │     │
-│     │ • Priority logic   │      │  • File operations  │     │
-│     └─────────┬──────────┘      └──────────┬─────────┘     │
-└───────────────┼──────────────────────────────┼───────────────┘
-                │                              │
-                └──────────────┬───────────────┘
-                               │
-                               ▼
-┌─────────────────────────────────────────────────────────────┐
-│                       DOMAIN LAYER                          │
-│                                                               │
-│  ┌──────────┐      ┌──────────────┐      ┌──────────────┐  │
-│  │   Tag    │      │ RegexParser  │      │  Automaton   │  │
-│  │ • Def    │      │ • RPN parse  │      │ • NFA impl   │  │
-│  │ • Match  │      │ • Build NFA  │      │ • Matching    │  │
-│  └──────────┘      └──────────────┘      └──────────────┘  │
-└─────────────────────────────────────────────────────────────┘
+                    ┌──────────────┐
+                    │     CLI      │
+                    │  Infrastructure
+                    └──────┬───────┘
+                           │
+        ┌──────────────────┴──────────────────┐
+        │                                      │
+┌───────▼────────┐              ┌─────────────▼──────┐
+│LexicalAnalyzer │              │  CommandHandler    │
+│  Application   │              │    Application     │
+└───────┬────────┘              └─────────────┬──────┘
+        │                                      │
+        └──────────────┬───────────────────────┘
+                       │
+        ┌──────────────┼──────────────┐
+        │              │              │
+┌───────▼──────┐ ┌─────▼──────┐ ┌─────▼──────┐
+│     Tag      │ │RegexParser │ │ Automaton │
+│    Domain    │ │   Domain   │ │  Domain   │
+└──────────────┘ └────────────┘ └───────────┘
 ```
 
 ### Layer Responsibilities
