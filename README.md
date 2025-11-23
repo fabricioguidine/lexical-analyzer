@@ -1,68 +1,106 @@
 # Lexical Analyzer
 
+![Python Version](https://img.shields.io/badge/python-3.8%2B-blue.svg)
+![License](https://img.shields.io/badge/license-MIT-green.svg)
+![Status](https://img.shields.io/badge/status-stable-success.svg)
+
 A lexical analyzer implementation that divides input strings into sequences of subwords (tokens) based on user-defined tags specified using regular expressions in reverse Polish notation.
 
-## Overview
+## 📋 Table of Contents
+
+- [Overview](#overview)
+- [Features](#features)
+- [Architecture](#architecture)
+- [Installation](#installation)
+- [Usage](#usage)
+- [Regular Expression Syntax](#regular-expression-syntax)
+- [Testing](#testing)
+- [Project Structure](#project-structure)
+- [Error Handling](#error-handling)
+- [Algorithm Details](#algorithm-details)
+- [Documentation](#documentation)
+- [Contributors](#contributors)
+- [License](#license)
+
+## 🎯 Overview
 
 This project implements a lexical analyzer (lexer) that tokenizes input text according to user-defined tags. Each tag is specified using a regular expression in reverse Polish notation (RPN), and the system builds finite automata to recognize patterns defined by these expressions.
 
-### Key Features
+The analyzer uses a **longest match strategy** with priority resolution, ensuring accurate tokenization even when multiple tags could match the same input.
 
-- **Regular Expression Parsing**: Supports regular expressions in reverse Polish notation with union (+), concatenation (.), and Kleene star (*) operators
-- **Finite Automata Construction**: Automatically builds non-deterministic finite automata (NFA) from regular expressions
-- **Longest Match Strategy**: Prioritizes the longest matching prefix when multiple tags could match
-- **Priority Resolution**: When multiple tags match the same length, uses the order of definition as a tiebreaker
-- **Interactive Command Interface**: Full-featured CLI with commands for tag management, file processing, and automata inspection
-- **Overlap Detection**: Warns users when tag definitions overlap
-- **Clean Architecture**: Modular design with separation of concerns (domain, application, infrastructure layers)
+## ✨ Features
 
-## Project Structure
+- **🔍 Regular Expression Parsing**: Supports regular expressions in reverse Polish notation with union (`+`), concatenation (`.`), and Kleene star (`*`) operators
+- **🤖 Finite Automata Construction**: Automatically builds non-deterministic finite automata (NFA) from regular expressions
+- **📏 Longest Match Strategy**: Prioritizes the longest matching prefix when multiple tags could match
+- **⚖️ Priority Resolution**: When multiple tags match the same length, uses the order of definition as a tiebreaker
+- **💻 Interactive Command Interface**: Full-featured CLI with commands for tag management, file processing, and automata inspection
+- **⚠️ Overlap Detection**: Warns users when tag definitions overlap
+- **🏗️ Clean Architecture**: Modular design with separation of concerns (domain, application, infrastructure layers)
+
+## 🏛️ Architecture
+
+The project follows **Clean Architecture** principles with three distinct layers, ensuring separation of concerns and maintainability:
 
 ```
-.
-├── src/
-│   ├── domain/           # Core business logic
-│   │   ├── automaton.py  # Finite automaton implementation
-│   │   ├── regex_parser.py  # Regular expression parser (RPN)
-│   │   └── tag.py        # Tag definition and parsing
-│   ├── application/      # Use cases and application logic
-│   │   ├── lexer.py      # Main lexical analyzer
-│   │   └── command_handler.py  # Command processing
-│   └── infrastructure/   # External interfaces
-│       └── cli.py        # Command-line interface
-├── test/                 # Test suite
-│   ├── test_regex_parser.py
-│   ├── test_tag.py
-│   ├── test_lexer.py
-│   └── test_command_handler.py
-├── main.py               # Entry point
-├── Makefile              # Build system
-├── setup.py              # Python package setup
-└── requirements.txt       # Dependencies (none required)
+┌─────────────────────────────────────────────────────────────┐
+│                    Infrastructure Layer                      │
+│  ┌───────────────────────────────────────────────────────┐  │
+│  │  CLI (Command-Line Interface)                        │  │
+│  │  - User interaction                                  │  │
+│  │  - Input/output handling                             │  │
+│  └───────────────────────────────────────────────────────┘  │
+└─────────────────────────────────────────────────────────────┘
+                            ↕
+┌─────────────────────────────────────────────────────────────┐
+│                    Application Layer                        │
+│  ┌──────────────────────┐  ┌──────────────────────────┐  │
+│  │  LexicalAnalyzer     │  │  CommandHandler          │  │
+│  │  - Tokenization      │  │  - Command processing    │  │
+│  │  - Longest match     │  │  - Tag management        │  │
+│  │  - Priority logic    │  │  - File operations       │  │
+│  └──────────────────────┘  └──────────────────────────┘  │
+└─────────────────────────────────────────────────────────────┘
+                            ↕
+┌─────────────────────────────────────────────────────────────┐
+│                      Domain Layer                           │
+│  ┌──────────────┐  ┌──────────────┐  ┌──────────────┐    │
+│  │  Tag         │  │  RegexParser │  │  Automaton   │    │
+│  │  - Definition│  │  - RPN parse │  │  - NFA impl  │    │
+│  │  - Matching  │  │  - Build NFA │  │  - Matching  │    │
+│  └──────────────┘  └──────────────┘  └──────────────┘    │
+└─────────────────────────────────────────────────────────────┘
 ```
 
-## Architecture
+### Layer Responsibilities
 
-The project follows **Clean Architecture** principles with three main layers:
+#### **Domain Layer** (`src/domain/`)
+Contains the core business logic and domain entities:
+- **`FiniteAutomaton`**: NFA implementation for pattern matching with epsilon transitions
+- **`RegexParser`**: Parses RPN regular expressions and constructs automata using Thompson's construction
+- **`Tag`**: Represents a tag definition with its associated automaton and matching logic
 
-1. **Domain Layer** (`src/domain/`): Contains core business logic
-   - `FiniteAutomaton`: NFA implementation for pattern matching
-   - `RegexParser`: Parses RPN regular expressions and builds automata
-   - `Tag`: Represents a tag definition with its automaton
+#### **Application Layer** (`src/application/`)
+Contains use cases and application-specific logic:
+- **`LexicalAnalyzer`**: Main tokenization engine implementing longest match strategy and priority resolution
+- **`CommandHandler`**: Processes commands, manages tag definitions, and handles file operations
 
-2. **Application Layer** (`src/application/`): Contains use cases
-   - `LexicalAnalyzer`: Main tokenization logic with longest match and priority
-   - `CommandHandler`: Processes commands and manages tag definitions
+#### **Infrastructure Layer** (`src/infrastructure/`)
+Handles external interfaces and I/O:
+- **`CLI`**: Interactive command-line interface for user interaction
 
-3. **Infrastructure Layer** (`src/infrastructure/`): External interfaces
-   - `CLI`: Interactive command-line interface
+### Data Flow
 
-## Installation
+1. **Tag Definition**: User defines tags → `TagDefinitionParser` → `Tag` → `RegexParser` → `FiniteAutomaton`
+2. **Tokenization**: Input text → `LexicalAnalyzer` → matches against all `Tag` automata → returns token sequence
+3. **Command Processing**: User command → `CLI` → `CommandHandler` → appropriate use case → result
+
+## 📦 Installation
 
 ### Prerequisites
 
-- Python 3.8 or higher
-- Unix/Linux environment (or Windows with compatible tools)
+- **Python 3.8+** (tested on Python 3.8, 3.9, 3.10, 3.11)
+- **Operating System**: Windows, Linux, or macOS
 
 ### Setup
 
@@ -80,7 +118,7 @@ python setup.py install
 python main.py
 ```
 
-## Usage
+## 🚀 Usage
 
 ### Running the Program
 
@@ -146,7 +184,7 @@ VAR EQUALS INT
 [INFO] Exiting program
 ```
 
-## Regular Expression Syntax
+## 📝 Regular Expression Syntax
 
 ### Operators
 
@@ -173,7 +211,7 @@ VAR EQUALS INT
 - `ab.ba.+*` → `(ab + ba)*`
 - `01+2+3+4+5+6+7+8+9+01+2+3+4+5+6+7+8+9+*.` → `(0+1+2+...+9)(0+1+2+...+9)*` (integers)
 
-## Testing
+## 🧪 Testing
 
 Run the test suite:
 
@@ -191,23 +229,42 @@ pytest test/ -v
 ### Test Coverage
 
 The test suite includes:
-- Regular expression parser tests
-- Tag definition parsing tests
-- Lexical analyzer tokenization tests
-- Command handler tests
+- ✅ Regular expression parser tests
+- ✅ Tag definition parsing tests
+- ✅ Lexical analyzer tokenization tests
+- ✅ Command handler tests
 
-## Building
+## 📁 Project Structure
 
-The project includes a `Makefile` for common operations:
-
-```bash
-make test      # Run tests
-make run       # Run the program
-make clean     # Clean generated files
-make install   # Install (no-op, no dependencies)
+```
+lexical-analyzer/
+├── src/
+│   ├── domain/              # Core business logic
+│   │   ├── __init__.py
+│   │   ├── automaton.py     # Finite automaton implementation
+│   │   ├── regex_parser.py  # Regular expression parser (RPN)
+│   │   └── tag.py           # Tag definition and parsing
+│   ├── application/         # Use cases and application logic
+│   │   ├── __init__.py
+│   │   ├── lexer.py         # Main lexical analyzer
+│   │   └── command_handler.py  # Command processing
+│   └── infrastructure/      # External interfaces
+│       ├── __init__.py
+│       └── cli.py           # Command-line interface
+├── test/                    # Test suite
+│   ├── __init__.py
+│   ├── test_regex_parser.py
+│   ├── test_tag.py
+│   ├── test_lexer.py
+│   └── test_command_handler.py
+├── main.py                  # Entry point
+├── Makefile                 # Build system
+├── setup.py                 # Python package setup
+├── requirements.txt         # Dependencies (none required)
+└── README.md                # This file
 ```
 
-## Error Handling
+## ⚠️ Error Handling
 
 The program provides three types of messages:
 
@@ -222,7 +279,7 @@ The program provides three types of messages:
 3. **Tokenization Failure**: Input cannot be fully tokenized with available tags
 4. **File Errors**: File not found, permission errors, etc.
 
-## Algorithm Details
+## 🔬 Algorithm Details
 
 ### Longest Match Strategy
 
@@ -236,7 +293,15 @@ When tokenizing input, the analyzer:
 
 The system detects when two tags can match the same strings and warns the user. During tokenization, priority is given to the first defined tag when overlaps occur.
 
-## Project Specification Document
+### Automaton Construction
+
+The system uses **Thompson's construction algorithm** to build NFAs from regular expressions:
+- Single characters create simple two-state automata
+- Union operations create branching with epsilon transitions
+- Concatenation connects automata sequentially
+- Kleene star creates loops with epsilon transitions
+
+## 📚 Documentation
 
 The complete project specification is available in the repository:
 
@@ -249,28 +314,24 @@ This document contains:
 - Examples and use cases
 - Evaluation criteria
 
-## Authors
+## 👥 Contributors
 
 - **Fabrício de Sousa Guidine**
 - **Débora Izabel Duarte**
 - **Guilherme**
 - **Juarez**
 
-## Course Information
+## 🎓 Course Information
 
 **Course**: Aspectos Teóricos da Computação (DCC146)  
 **Institution**: Departamento de Ciência da Computação - UFJF  
 **Professor**: Prof. Dr. Gleiph Ghiotto Lima de Menezes  
 **Semester**: 2021-1 (ERE - Ensino Remoto Emergencial)
 
-## License
+## 📄 License
 
 See [LICENSE](LICENSE) file for details.
 
-## Contributing
-
-This is an academic project. For questions or issues, please contact the authors.
-
-## Acknowledgments
+## 🙏 Acknowledgments
 
 Special thanks to Prof. Dr. Gleiph Ghiotto Lima de Menezes for the project specification and guidance.
