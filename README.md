@@ -325,8 +325,8 @@ This document contains:
 
 ## 👥 Contributors
 
-- **Fabrício de Sousa Guidine**
-- **Débora Izabel Duarte**
+- **[@fabricioguidine](https://github.com/fabricioguidine)**
+- **[@DeboraIRDuarte](https://github.com/DeboraIRDuarte)**
 - **Guilherme**
 - **Juarez**
 
