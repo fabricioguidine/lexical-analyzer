@@ -58,8 +58,8 @@ The project follows **Clean Architecture** principles with three distinct layers
         └──────────────┬──────────────────────┘
                        │
                       Domain
-        ┌──────────────┼──────────────┐
-        │              │              │
+        ┌──────────────┼─────────────┐
+        │              │             │
 ┌───────▼──────┐ ┌─────▼──────┐ ┌────▼──────┐
 │     Tag      │ │RegexParser │ │ Automaton │
 └──────────────┘ └────────────┘ └───────────┘
