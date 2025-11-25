@@ -326,7 +326,3 @@ This document contains:
 ## 📄 License
 
 See [LICENSE](LICENSE) file for details.
-
-## 🙏 Acknowledgments
-
-Special thanks to Prof. Dr. Gleiph Ghiotto Lima de Menezes for the project specification and guidance.
