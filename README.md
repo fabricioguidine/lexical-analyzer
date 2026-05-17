@@ -1,7 +1,10 @@
 # Lexical Analyzer
 
-![Python Version](https://img.shields.io/badge/python-3.8%2B-blue.svg)
-![License](https://img.shields.io/badge/license-MIT-green.svg)
+[![CI](https://github.com/fabricioguidine/lexical-analyzer/actions/workflows/ci.yml/badge.svg)](https://github.com/fabricioguidine/lexical-analyzer/actions/workflows/ci.yml)
+[![Python Version](https://img.shields.io/badge/python-3.10%20%7C%203.11%20%7C%203.12-blue.svg)](https://www.python.org/downloads/)
+[![License: MIT](https://img.shields.io/badge/license-MIT-green.svg)](LICENSE)
+[![Code style: ruff](https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/astral-sh/ruff/main/assets/badge/v2.json)](https://github.com/astral-sh/ruff)
+[![Type checked: mypy](https://img.shields.io/badge/types-mypy-blue.svg)](https://mypy-lang.org/)
 ![Status](https://img.shields.io/badge/status-stable-success.svg)
 
 A lexical analyzer implementation that divides input strings into sequences of subwords (tokens) based on user-defined tags specified using regular expressions in reverse Polish notation.
