@@ -42,3 +42,22 @@ Thumbs.db
 *.txt
 !requirements.txt
 
+# Test & coverage artifacts
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.coverage
+.coverage.*
+coverage.xml
+htmlcov/
+.tox/
+.nox/
+
+# Build / packaging
+target/
+node_modules/
+
+# Agent / assistant
+CLAUDE.md
+.claude/
+
