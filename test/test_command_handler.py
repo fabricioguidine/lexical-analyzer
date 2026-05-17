@@ -62,7 +62,7 @@ class TestCommandHandler(unittest.TestCase):
 
             # Create new handler and load
             new_handler = CommandHandler()
-            valid_tags, invalid = new_handler.load_tags_from_file(filepath)
+            valid_tags, _invalid = new_handler.load_tags_from_file(filepath)
             self.assertEqual(len(valid_tags), 2)
             self.assertEqual(valid_tags[0].name, "VAR")
             self.assertEqual(valid_tags[1].name, "INT")
