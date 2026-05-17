@@ -4,7 +4,7 @@ Setup script for Lexical Analyzer.
 Authors: Fabrício de Sousa Guidine, Débora Izabel Duarte, Guilherme, Juarez
 """
 
-from setuptools import setup, find_packages
+from setuptools import find_packages, setup
 
 setup(
     name="lexical-analyzer",
@@ -19,4 +19,3 @@ setup(
         ],
     },
 )
-
